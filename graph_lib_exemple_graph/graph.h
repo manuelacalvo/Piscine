@@ -148,14 +148,19 @@ class Vertex
         // La ligne précédente est en gros équivalent à la ligne suivante :
         // VertexInterface * m_interface = nullptr;
 
+        ///couleur pour la connexite
+        char m_coul;
+
 
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Vertex (double value=0, VertexInterface *interface=nullptr) :
-            m_value(value), m_interface(interface)  {  }
+            m_value(value), m_interface(interface), m_coul(' ')  {  }
 
+        Vertex (double value, VertexInterface *interface, std::vector<int> _in, std::vector<int> _out) :
+            m_value(value), m_interface(interface), m_in(_in), m_out(_out)  {  }
         /// Vertex étant géré par Graph ce sera la méthode update de graph qui appellera
         /// le pre_update et post_update de Vertex (pas directement la boucle de jeu)
         /// Voir l'implémentation Graph::update dans le .cpp
@@ -227,9 +232,11 @@ class Edge
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
-        Edge (double weight=0, EdgeInterface *interface=nullptr) :
-            m_weight(weight), m_interface(interface)  {  }
+        Edge (double weight=0, int _from = 0, int _to = 0) :
+            m_weight(weight), m_interface(nullptr) , m_from (_from), m_to (_to)  {  }
 
+        Edge (double weight, EdgeInterface *interface,int _from, int _to) :
+            m_weight(weight), m_interface(interface) , m_from (_from), m_to (_to)  {  }
         /// Edge étant géré par Graph ce sera la méthode update de graph qui appellera
         /// le pre_update et post_update de Edge (pas directement la boucle de jeu)
         /// Voir l'implémentation Graph::update dans le .cpp
@@ -263,6 +270,9 @@ class GraphInterface
         /// Dans cette boite seront ajoutés des boutons de contrôle etc...
         grman::WidgetBox m_tool_box;
 
+          ///case permettant la sauvegarde
+        grman::WidgetCheckBox m_sauvegarde;
+
 
         // A compléter éventuellement par des widgets de décoration ou
         // d'édition (boutons ajouter/enlever ...)
@@ -292,6 +302,9 @@ class Graph
         std::shared_ptr<GraphInterface> m_interface = nullptr;
 
 
+
+
+
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
@@ -303,8 +316,18 @@ class Graph
         void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
         void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
 
+        ///edition des reseaux par l'utilisateur
         void editer_reseaux(int choix );
+        ///methode pour recuperer les aretes des graphes
         void recup_arete(std::string _nom);
+
+
+        ///methode pour sauvegarder les graphes
+        void sauvegarde();
+        ///methode colorier_som
+        void colorier_som(Vertex v, char coul);
+        ///methode colorier_compo_connexe
+        void colorier_compo_connexe();
 
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface

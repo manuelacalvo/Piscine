@@ -20,17 +20,22 @@ int main()
 
     g.editer_reseaux(choix);
 
+    g.colorier_compo_connexe();
+
+
 
 
     /// Vous gardez la main sur la "boucle de jeu"
     /// ( contrairement à des frameworks plus avancés )
-    while ( !key[KEY_ESC] )
+   while ( !key[KEY_ESC] )
     {
         /// Il faut appeler les méthodes d'update des objets qui comportent des widgets
-        g.update();
+       g.update();
 
         /// Mise à jour générale (clavier/souris/buffer etc...)
         grman::mettre_a_jour();
+
+
     }
 
     grman::fermer_allegro();
