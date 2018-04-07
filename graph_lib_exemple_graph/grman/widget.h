@@ -187,6 +187,7 @@ class Widget
 
         /// Les accesseurs de "styles" sont à compléter...
         void set_bg_color(int bgc) { m_bg_color = bgc; }
+        int get_bg_color() { return m_bg_color;}
         int get_border_color() { return is_gui_focus() ? m_border_color_focus : is_gui_over() ? m_border_color_over : m_border_color; }
 
         Widget(const Widget&) = delete;
@@ -242,6 +243,7 @@ class WidgetCheckBox : public Widget
 
         virtual void draw();
         virtual void interact_focus();
+
         virtual bool captures_focus() { return true; }
 
         bool get_value() { return m_value; }
@@ -277,13 +279,14 @@ class WidgetButton : public Widget
 
 class WidgetVSlider : public Widget
 {
+
     protected :
-        double m_value = 0;
+
         double m_min;
         double m_max;
 
         bool m_integer;
-
+        double m_value = 0;
         double m_handle_ratio = .5;
         double m_rail_ratio = .3;
         double m_specific_padding = 2;
@@ -294,6 +297,8 @@ class WidgetVSlider : public Widget
         int get_hhandle() { return std::max(1., m_handle_ratio * m_view->w/2); }
 
     public :
+
+
 
         WidgetVSlider(double min=0, double max=1, bool integer=false) :
             m_min(min), m_max(max), m_integer(integer)

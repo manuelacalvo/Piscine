@@ -18,6 +18,7 @@ void rect_around(BITMAP *bmp, int color, int thickness=1, int receding=0)
 
 void Widget::update()
 {
+
     update_interact();
     update_pre_draw();
     update_draw();
@@ -184,8 +185,10 @@ void WidgetText::set_message(std::string message)
                     CHECKBOX
 ****************************************************/
 
+
 void WidgetCheckBox::draw()
 {
+
     if (m_value)
     {
         thick_line(m_view, m_view->w/4, m_view->h/4,   m_view->w/2, m_view->h-3, 2, VERT );
@@ -201,6 +204,7 @@ void WidgetCheckBox::draw()
 
 void WidgetCheckBox::interact_focus()
 {
+
     if ( mouse_click )
         m_value = !m_value;
 
@@ -240,10 +244,13 @@ void WidgetVSlider::draw()
 
 void WidgetVSlider::interact_focus()
 {
+
     if ( mouse_b )
     {
+
         int hhandle = get_hhandle();
         int yrel = mouse_y - (m_abs_frame.pos.y + get_bp() + hhandle);
+        m_integer = true;
         m_value = m_max-(m_max-m_min)*yrel/(m_view->h-2*hhandle);
         limit_to_range();
     }
