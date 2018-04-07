@@ -82,6 +82,7 @@
                     VERTEX
 ****************************************************/
 
+///graphisme
 class VertexInterface
 {
     // Les (methodes des) classes amies pourront accéder
@@ -114,6 +115,12 @@ class VertexInterface
         // Une boite pour le label précédent
         grman::WidgetText m_box_label_idx;
 
+        ///CLICK ME , etc
+        grman::WidgetText m_legende;
+        grman::WidgetBox m_boite_regles;
+        grman::WidgetCheckBox m_marche;
+
+
     public :
 
         // Le constructeur met en place les éléments de l'interface
@@ -140,6 +147,7 @@ class Vertex
 
         /// un exemple de donnée associée à l'arc, on peut en ajouter d'autres...
         double m_value;
+        bool m_actif ;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<VertexInterface> m_interface = nullptr;
@@ -148,14 +156,22 @@ class Vertex
         // La ligne précédente est en gros équivalent à la ligne suivante :
         // VertexInterface * m_interface = nullptr;
 
+        ///couleur pour la connexite
+        char m_coul;
+
+        ///coordonées sommet
+        int x;
+        int y;
 
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Vertex (double value=0, VertexInterface *interface=nullptr) :
-            m_value(value), m_interface(interface)  {  }
+            m_value(value), m_interface(interface), m_coul(' '),x(0),y(0), m_actif(true)  {  }
 
+        Vertex (double value, VertexInterface *interface, std::vector<int> _in, std::vector<int> _out) :
+            m_value(value), m_interface(interface), m_in(_in), m_out(_out)  {  }
         /// Vertex étant géré par Graph ce sera la méthode update de graph qui appellera
         /// le pre_update et post_update de Vertex (pas directement la boucle de jeu)
         /// Voir l'implémentation Graph::update dans le .cpp
@@ -194,6 +210,8 @@ class EdgeInterface
         // Un label de visualisation du poids de l'arc
         grman::WidgetText m_label_weight;
 
+        grman::WidgetCheckBox m_marche;
+
     public :
 
         // Le constructeur met en place les éléments de l'interface
@@ -219,6 +237,7 @@ class Edge
         /// un exemple de donnée associée à l'arc, on peut en ajouter d'autres...
         double m_weight;
 
+
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<EdgeInterface> m_interface = nullptr;
 
@@ -227,9 +246,11 @@ class Edge
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
-        Edge (double weight=0, EdgeInterface *interface=nullptr) :
-            m_weight(weight), m_interface(interface)  {  }
+        Edge (double weight=0, int _from = 0, int _to = 0) :
+            m_weight(weight), m_interface(nullptr) , m_from (_from), m_to (_to) {  }
 
+        Edge (double weight, EdgeInterface *interface,int _from, int _to) :
+            m_weight(weight), m_interface(interface) , m_from (_from), m_to (_to)  {  }
         /// Edge étant géré par Graph ce sera la méthode update de graph qui appellera
         /// le pre_update et post_update de Edge (pas directement la boucle de jeu)
         /// Voir l'implémentation Graph::update dans le .cpp
@@ -263,15 +284,22 @@ class GraphInterface
         /// Dans cette boite seront ajoutés des boutons de contrôle etc...
         grman::WidgetBox m_tool_box;
 
+          ///case permettant la sauvegarde
 
+        grman::WidgetEdge m_lien3;
+         grman::WidgetText m_legende_sauvegarde;
+        grman::WidgetText m_legende_connexite;
         // A compléter éventuellement par des widgets de décoration ou
         // d'édition (boutons ajouter/enlever ...)
 
     public :
-
+ grman::WidgetCheckBox m_sauvegarde;
+ grman::WidgetCheckBox m_connexite;
+  grman::WidgetCheckBox m_animation;
         // Le constructeur met en place les éléments de l'interface
         // voir l'implémentation dans le .cpp
         GraphInterface(int x, int y, int w, int h);
+
 };
 
 
@@ -285,26 +313,82 @@ class Graph
         /// La liste des sommets
         std::map<int, Vertex> m_vertices;
 
+        /// ordre
+        int m_ordre;
+        int m_arete;
+        int** m_adjacence;
+        int m_nb_fort_connexe;
+        std::vector<int> m_combinaison_totale;
+        std::vector<int> m_combinaison_partielle;
+        bool m_trouve =false;
+        int m_k_min = 0;
+
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<GraphInterface> m_interface = nullptr;
+
+
+
 
 
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
-        Graph (GraphInterface *interface=nullptr) :
-            m_interface(interface)  {  }
+        Graph (GraphInterface *interface=nullptr)
+        : m_interface(interface), m_ordre(0), m_arete(0), m_trouve(false)
+        {
+
+
+        }
+
+        ~Graph()
+        {
+             //Destruction matrice d'adjacence
+            for(int i=0; i<m_ordre; i++ )
+            {
+        delete[] m_adjacence[i];
+            }
+        delete[] m_adjacence;
+        }
 
         void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
         void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
 
-        /// Méthode spéciale qui construit un graphe arbitraire (démo)
-        /// Voir implémentation dans le .cpp
-        /// Cette méthode est à enlever et remplacer par un système
-        /// de chargement de fichiers par exemple.
-        void make_example();
+        std::shared_ptr<GraphInterface> get_interface();
+        ///edition des reseaux par l'utilisateur
+        int editer_reseaux(int choix1, int choix2 );
+        ///methode pour recuperer les aretes des graphes
+        void recup_arete(std::string _nom);
+        void remplissage_min_mout();
 
+        ///methode pour sauvegarder les graphes
+        void sauvegarde();
+        ///methode colorier_som
+        void colorier_som(Vertex v, char coul);
+        ///methode colorier_compo_connexe
+        int colorier_compo_connexe();
+
+        ///methode pour recuperer les graphes sauvegardés
+        void recup_sommet(std::string _nom);
+        ///methode suppression arete
+        void supp_arete_test();
+        void supp_arete(int eidx);
+        ///methode suppression sommet
+        void supp_sommet_selec();
+        void supp_sommet(int vdx);
+        ///methode dynamique pop
+        void dynamique_pop1();
+        void dynamique_pop2(int sommet);
+        int* Une_Compo_Forte_Connexe( int s, int chiffre);
+        void remplir_matrice_adjacence();
+        int ** toutes_compo_forte_connexe();
+        void fortement_connexe();
+        void graphe_reduit(int** fort);
+        void k_connexite(int k);
+        void changement_nb_desactive();
+        void boucle_combinaison(int offset, int numero_de_k_uplets, int k);
+        int facto(int n);
+        int combi(int k);
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();
