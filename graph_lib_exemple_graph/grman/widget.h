@@ -187,7 +187,6 @@ class Widget
 
         /// Les accesseurs de "styles" sont à compléter...
         void set_bg_color(int bgc) { m_bg_color = bgc; }
-        int get_bg_color() { return m_bg_color;}
         int get_border_color() { return is_gui_focus() ? m_border_color_focus : is_gui_over() ? m_border_color_over : m_border_color; }
 
         Widget(const Widget&) = delete;

@@ -117,8 +117,8 @@ class VertexInterface
 
         ///CLICK ME , etc
         grman::WidgetText m_legende;
-        grman::WidgetBox m_boite_regles;
         grman::WidgetCheckBox m_marche;
+
 
 
     public :
@@ -147,7 +147,7 @@ class Vertex
 
         /// un exemple de donnée associée à l'arc, on peut en ajouter d'autres...
         double m_value;
-        bool m_actif ;
+        bool m_actif;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<VertexInterface> m_interface = nullptr;
@@ -289,13 +289,29 @@ class GraphInterface
         grman::WidgetEdge m_lien3;
          grman::WidgetText m_legende_sauvegarde;
         grman::WidgetText m_legende_connexite;
+        grman::WidgetText m_legende_animation;
+        grman::WidgetText m_legende_fort_connexite;
+        grman::WidgetText m_legende_k_connexite;
+        grman::WidgetText m_legende_menu;
+
         // A compléter éventuellement par des widgets de décoration ou
         // d'édition (boutons ajouter/enlever ...)
 
     public :
- grman::WidgetCheckBox m_sauvegarde;
- grman::WidgetCheckBox m_connexite;
-  grman::WidgetCheckBox m_animation;
+
+    grman::WidgetButton m_menu;
+    grman::WidgetButton m_k_connexite;
+    grman::WidgetButton m_sauvegarde;
+    grman::WidgetButton m_connexite;
+    grman::WidgetButton m_animation;
+    grman::WidgetButton m_ajout_s;
+    grman::WidgetButton m_ajout_a;
+    grman::WidgetButton m_fort_connexite;;
+    grman::WidgetText m_ajout_s_text;
+     grman::WidgetText m_ajout_a_text;
+    grman::WidgetText m_connexite_text;
+
+
         // Le constructeur met en place les éléments de l'interface
         // voir l'implémentation dans le .cpp
         GraphInterface(int x, int y, int w, int h);
@@ -317,25 +333,28 @@ class Graph
         int m_ordre;
         int m_arete;
         int** m_adjacence;
-        int m_nb_fort_connexe;
         std::vector<int> m_combinaison_totale;
         std::vector<int> m_combinaison_partielle;
-        bool m_trouve =false;
-        int m_k_min = 0;
+        bool m_trouve;
+
+
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<GraphInterface> m_interface = nullptr;
-
+        int m_monde;
 
 
 
 
     public:
 
+        int GetMonde();
+        void SetMonde(int monde);
+
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Graph (GraphInterface *interface=nullptr)
-        : m_interface(interface), m_ordre(0), m_arete(0), m_trouve(false)
+        : m_interface(interface), m_ordre(0), m_arete(0), m_trouve(false), m_monde(0)
         {
 
 
@@ -355,40 +374,55 @@ class Graph
         void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
 
         std::shared_ptr<GraphInterface> get_interface();
+
+        ///******NOS METHODES******///
         ///edition des reseaux par l'utilisateur
-        int editer_reseaux(int choix1, int choix2 );
+        int editer_reseaux(int choix2 );
+
         ///methode pour recuperer les aretes des graphes
         void recup_arete(std::string _nom);
         void remplissage_min_mout();
 
         ///methode pour sauvegarder les graphes
         void sauvegarde();
-        ///methode colorier_som
-        void colorier_som(Vertex v, char coul);
-        ///methode colorier_compo_connexe
-        int colorier_compo_connexe();
+
 
         ///methode pour recuperer les graphes sauvegardés
         void recup_sommet(std::string _nom);
+
         ///methode suppression arete
         void supp_arete_test();
         void supp_arete(int eidx);
+
         ///methode suppression sommet
         void supp_sommet_selec();
         void supp_sommet(int vdx);
+
+        ///methode ajout sommet
+        void ajout_sommet();
+        void choix_photo(int s_ajout);
+
+        ///methode ajout arete
+        void ajout_arete(int s_ajout, int s_relie);
+        void ajout_arete_selec();
+
         ///methode dynamique pop
         void dynamique_pop1();
         void dynamique_pop2(int sommet);
+
+        ///methode étude connexité
+        void colorier_som(Vertex v, char coul);
+        int colorier_compo_connexe();
         int* Une_Compo_Forte_Connexe( int s, int chiffre);
         void remplir_matrice_adjacence();
         int ** toutes_compo_forte_connexe();
         void fortement_connexe();
-        void graphe_reduit(int** fort);
         void k_connexite(int k);
         void changement_nb_desactive();
         void boucle_combinaison(int offset, int numero_de_k_uplets, int k);
         int facto(int n);
         int combi(int k);
+
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();

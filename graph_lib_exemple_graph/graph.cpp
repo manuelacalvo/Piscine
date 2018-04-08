@@ -9,31 +9,24 @@
 /// Le constructeur met en place les éléments de l'interface
 VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, int pic_idx)
 {
-    /// CLICK ME
-    m_top_box.add_child( m_legende );
-    m_legende.set_message("<- CLICK ME");
-    m_legende.set_gravity_y(grman::GravityY::Down );
+
     /// On ajoute une check-box en bas à gauche
     m_top_box.add_child( m_marche );
-    m_marche.set_dim(40, 20);
-    m_marche.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down );
+    m_marche.set_dim(20, 10);
+    m_marche.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up );
 
 
     /// On ajoute en haut à gauche du cadre un sous-cadre (une boite dans la boite)
-    m_top_box.add_child( m_boite_regles );
-    m_boite_regles.set_dim(40, 80);
-    m_boite_regles.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up );
-    m_boite_regles.set_bg_color(SABLECLAIR);
 
     // La boite englobante
     m_top_box.set_pos(x, y);
-    m_top_box.set_dim(130, 100);
+    m_top_box.set_dim(100, 70);
     m_top_box.set_moveable();
 
     // Le slider de réglage de valeur
     m_top_box.add_child( m_slider_value );
     m_slider_value.set_range(0.0, 50);  /// Valeurs arbitraires, à adapter...
-    m_slider_value.set_dim(20,80);
+    m_slider_value.set_dim(10,40);
     m_slider_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
     // Label de visualisation de valeur
@@ -122,7 +115,7 @@ EdgeInterface::EdgeInterface(Vertex& from, Vertex& to)
     m_slider_weight.set_gravity_y(grman::GravityY::Up);
 
     m_top_edge.add_child( m_marche );
-    m_marche.set_dim(40, 20);
+    m_marche.set_dim(20, 10);
     m_marche.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down );
 
     /// Label de visualisation de valeur
@@ -169,35 +162,69 @@ void Edge::post_update()
 /// Ici le constructeur se contente de préparer un cadre d'accueil des
 /// éléments qui seront ensuite ajoutés lors de la mise ne place du Graphe
 GraphInterface::GraphInterface(int x, int y, int w, int h)
+
 {
-    m_legende_sauvegarde.set_message("SAVE ME");
+     m_top_box.add_child(m_tool_box);
+    m_tool_box.set_dim(80,720);
+    m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
+    m_tool_box.set_bg_color(FUCHSIACLAIR);
+
+    /// On ajoute une check-box sauvegarde en bas à gauche
+    m_tool_box.add_child(m_sauvegarde);
+    m_legende_sauvegarde.set_message("SAUVER");
+    m_sauvegarde.add_child(m_legende_sauvegarde);
+    m_sauvegarde.set_frame(3,550,80,20);
+    m_sauvegarde.set_bg_color(FUCHSIA);
     m_legende_sauvegarde.set_gravity_y(grman::GravityY::Down );
-    m_legende_sauvegarde.set_gravity_x(grman::GravityX::Left );
+    m_legende_sauvegarde.set_gravity_x(grman::GravityX::Center );
 
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
 
     /// On ajoute une check-box m_connexité pour lancer le programme connexité en bas à droite
-    m_connexite.set_dim(40, 20);
-    m_connexite.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Down);
+    m_connexite.set_dim(80, 20);
+    m_connexite_text.set_message("CONNEXITE");
+    m_connexite.set_bg_color(BLEUCLAIR);
+    m_connexite.set_frame(0,230,80,20);
+    m_tool_box.add_child(m_connexite);
+    m_connexite.add_child(m_connexite_text);
+    m_connexite_text.set_gravity_x(grman::GravityX::Center );
 
 
+    m_legende_fort_connexite.set_message("FCONNEXITE");
+    m_fort_connexite.set_bg_color(BLEUCLAIR);
+    m_fort_connexite.set_frame(0,250,80,20);
+    m_tool_box.add_child(m_fort_connexite);
+    m_fort_connexite.add_child(m_legende_fort_connexite);
+    m_legende_fort_connexite.set_gravity_x(grman::GravityX::Center );
 
-    m_top_box.add_child(m_tool_box);
-    m_tool_box.set_dim(80,720);
-    m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
-    m_tool_box.set_bg_color(FUCHSIACLAIR);
+     m_legende_k_connexite.set_message("KCONNEXITE");
+    m_k_connexite.set_bg_color(BLEUCLAIR);
+    m_k_connexite.set_frame(0,270,80,20);
+    m_tool_box.add_child(m_k_connexite);
+    m_k_connexite.add_child(m_legende_k_connexite);
+    m_legende_k_connexite.set_gravity_x(grman::GravityX::Center );
+
+
 
 /// On ajoute une check-box m_animation en haut à droite
-    //m_tool_box.add_child(m_animation);
-    m_animation.set_dim(40, 20);
-    m_animation.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
+    m_tool_box.add_child(m_animation);
+    m_animation.set_bg_color(FUCHSIA);
+    m_animation.set_frame(3,3,80,20);
+    m_animation.add_child(m_legende_animation);
+    m_legende_animation.set_message("SIMULATION");
+    m_legende_animation.set_gravity_x(grman::GravityX::Center );
 
-    /// On ajoute une check-box sauvegarde en bas à gauche
+     m_top_box.add_child(m_menu);
+    m_menu.set_bg_color(VERTCLAIR);
+    m_menu.set_frame(350,10,90,30);
+    m_menu.add_child(m_legende_menu);
+    m_legende_menu.set_message("MENU");
+    m_legende_menu.set_gravity_x(grman::GravityX::Center );
 
-    m_sauvegarde.set_dim(40, 20);
-    m_sauvegarde.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down );
+
+
 
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
@@ -205,19 +232,30 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_main_box.set_bg_color(BLANCJAUNE);
 
 
+    ///  un 1er bouton ajout sommet
+     m_tool_box.add_child( m_ajout_s );
+   m_ajout_s.set_frame(0,150,80,20);
+    m_ajout_s.set_bg_color(FUCHSIA);
+    m_ajout_s.add_child(m_ajout_s_text);
+    m_ajout_s_text.set_message("AJOUT_S");
 
-
+     ///  un 1er bouton ajout arete
+     m_tool_box.add_child( m_ajout_a );
+   m_ajout_a.set_frame(0,130,80,20);
+    m_ajout_a.set_bg_color(FUCHSIA);
+    m_ajout_a.add_child(m_ajout_a_text);
+    m_ajout_a_text.set_message("AJOUT_A");
 
 
 
 }
 
 ///methode permettant à l'utilisateur de creer des graphes
-int Graph::editer_reseaux(int choix1, int choix2)
+int Graph::editer_reseaux( int choix2)
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
 
-    switch(choix1)
+    switch(m_monde)
     {
 
     ///banquise
@@ -236,7 +274,7 @@ int Graph::editer_reseaux(int choix1, int choix2)
 
                 sprintf(chaine,"banquise/%d.jpg",i);
 
-                add_interfaced_vertex(i, 30.0*i, 30*i, 30*i, chaine);
+                add_interfaced_vertex(i, i, 30*i, 30*i, chaine);
 
 
             }
@@ -273,7 +311,7 @@ int Graph::editer_reseaux(int choix1, int choix2)
             {
                 ///charger et afficher un sommet
                 sprintf(chaine,"savane/%d.jpg",i);
-                add_interfaced_vertex(i, 30.0*i, 30*i, 30*i, chaine);
+                add_interfaced_vertex(i, 2*i, 200/i, 100/i, chaine);
 
 
             }
@@ -313,7 +351,7 @@ int Graph::editer_reseaux(int choix1, int choix2)
             {
                 ///charger et afficher un sommet
                 sprintf(chaine,"foret/%d.jpg",i);
-                add_interfaced_vertex(i, 30.0*i, 30*i, 30*i, chaine);
+                add_interfaced_vertex(i, 50, 200/i, 100/i, chaine);
             }
 
 
@@ -455,7 +493,7 @@ void Graph::remplissage_min_mout()
 }
 
 
-
+///methode sauvegarde graphe
 void Graph::sauvegarde()
 {
 ///donnees a sauvegarder :m_ordre, index/sommet + coord + N, map aretes
@@ -514,23 +552,24 @@ std::shared_ptr<GraphInterface> Graph::get_interface()
     return m_interface;
 }
 
-
+///methode supprimé sommet selec
 void Graph::supp_sommet_selec()
 {
     ///On regarde l'état des checkbox de tous les sommet
-    ///Si l'état est a true (on a cliqué dessus pour le supprimer
+    ///Si l'état est a true (on a cliqué dessus pour le supprimer)
     std::vector <int> indice_supp;
     for(auto elem : m_vertices)
     {
 
-
+std::cout<<" dans le for supp"<<std::endl;
         if(m_vertices[elem.first].m_interface->m_marche.get_value() == true)
         {
+            std::cout<<" dans le if supp"<<std::endl;
             indice_supp.push_back(elem.first);
 
         }
     }
-
+std::cout<<" fin for supp"<<std::endl;
     for( int i = 0; i< indice_supp.size(); i++)
     {
         std::cout << "indice du sommet a supprimer : " << i << std::endl;
@@ -551,6 +590,8 @@ void Graph::supp_sommet_selec()
 
 
 }
+
+///methode supprimé sommet
 void Graph::supp_sommet(int vdx)
 {
     std::cout << "dans supp_sommet" << std::endl;
@@ -580,7 +621,7 @@ void Graph::supp_sommet(int vdx)
 
 }
 
-
+///methode supprimé arete
 void Graph::supp_arete(int eidx)
 {
     /// référence vers le Edge à enlever
@@ -636,7 +677,7 @@ void Graph::supp_arete(int eidx)
 
 }
 
-
+///methode supprimé arete
 void Graph::supp_arete_test()
 {
     /// référence vers le Edge à enlever
@@ -730,6 +771,216 @@ void Graph::supp_arete_test()
     }
 }
 
+void Graph::ajout_arete_selec()
+{
+    m_interface->m_ajout_a.set_value(false);
+    int s1,s2;
+    std::cout<<" choisissez les sommets à relier svp "<<std::endl;
+    std::cin>>s1;
+    std::cin>>s2;
+    ajout_arete(s1,s2);
+}
+
+///methode ajout arete
+void Graph::ajout_arete(int s_ajout, int s_relie)
+{
+    ///variables
+    ///on recupere le sens de l'arete
+    int sens;
+    ///on recupere le poids de l'arete
+    int poids;
+    std::cout<<" choissisez le poids de l'arete "<<std::endl;
+    std::cin>>poids;
+    std::cout<<" 1.arete entrante  2. sortante pour votre sommet ajoute "<<std::endl;
+    std::cin>>sens;
+    int indice;
+    ///on cherche ou ranger l'arete dans la map
+    for(auto elem : m_edges)
+    {
+        indice = elem.first;
+
+    }
+    indice++;
+    ///cas d'une arete entrante
+    if(sens ==1)
+    {
+        ///on cree une arete
+        Edge e (poids,s_relie, s_ajout );
+        ///on l'affiche
+       add_interfaced_edge(indice, s_relie, s_ajout, poids);
+       ///on l'ajoute à la map d'arete
+        //m_edges.insert({indice,e});
+        m_edges[indice]=e;
+        ///on remplie ses m_to et m_from
+        m_edges[indice].m_from = s_relie;
+        m_edges[indice].m_to = s_ajout;
+    }
+
+    ///cas d'une arete sortante
+    if(sens ==2)
+    {
+        ///on cree une arete
+        Edge e(poids, s_ajout, s_relie);
+        ///on l'affiche
+        add_interfaced_edge(indice, s_ajout, s_relie, poids);
+        ///on l'ajoute a la map d'arete
+        m_edges.insert({indice, e});
+         ///on remplie ses m_to et m_from
+        m_edges[indice].m_to = s_relie;
+        m_edges[indice].m_from = s_ajout;
+
+    }
+
+
+        ///on parcours les aretes
+        for(auto elem : m_edges)
+        {
+            ///si le 1er sommet de l'arete est le meme que notre sommet
+            if((elem.second).m_from == s_ajout)
+            {
+                ///on ajoute l'indice de cette arete dans le vec d'aretes sortantes
+                m_vertices[s_ajout].m_out.push_back(elem.first) ;
+
+
+
+            }
+
+
+            ///si le 2eme sommet de l'arete est le meme que notre sommet
+            if((elem.second).m_to == s_ajout)
+            {
+                ///on ajoute l'indice de cette arete dans le vec d'aretes entrantes
+                m_vertices[s_ajout].m_in.push_back(elem.first) ;
+
+
+            }
+
+              ///si le 1er sommet de l'arete est le meme que le sommet a relier
+            if((elem.second).m_from == s_relie)
+            {
+                ///on ajoute l'indice de cette arete dans le vec d'aretes sortantes
+                m_vertices[s_relie].m_out.push_back(elem.first) ;
+
+
+
+            }
+
+
+            ///si le 2eme sommet de l'arete est le meme que le sommet à relier
+            if((elem.second).m_to == s_relie)
+            {
+                ///on ajoute l'indice de cette arete dans le vec d'aretes entrantes
+                m_vertices[s_relie].m_in.push_back(elem.first) ;
+
+
+            }
+
+            ///on ajouter les m_to et m_from de chaque arete
+
+
+        }
+}
+
+///choix photo
+void Graph::choix_photo( int s_ajout)
+{
+    char chaine[256];
+    int photo;
+    std::cout<<" choississez votre animal svp "<<std::endl;
+    switch(m_monde)
+    {
+    case 1 :
+        {
+            std::cout<<"1.Baleine a bosse"<<std::endl<<"2.Elephant de mer"<<std::endl<<"3.Gorfou"<<std::endl<<"4.Gros poissons"<<std::endl<<"5.Le krill"<<std::endl<<"6.Leopard de mer"<<std::endl<<"7.Manchot Adelie"<<std::endl<<"8.Manchot empereur"<<std::endl<<"9.Orque"<<std::endl<<"10.Petits poissons"<<std::endl<<"11.Phoque"<<std::endl;
+            std::cin>>photo;
+            sprintf(chaine,"banquise/%d.jpg",photo);
+            add_interfaced_vertex(s_ajout, 10, 100, 100, chaine);
+            break;
+        }
+    case 2 :
+        {
+            std::cout<<"1.Babouin"<<std::endl<<"2.Buffle"<<std::endl<<"3.Elephant"<<std::endl<<"4.Fourmi"<<std::endl<<"5.Gazelle"<<std::endl<<"6.Gnou"<<std::endl<<"7.Guepard"<<std::endl<<"8.Hippopotame"<<std::endl<<"9.Hyène"<<std::endl<<"10.Leopard"<<std::endl<<"11.Lion"<<std::endl<<"12.Phacochere"<<std::endl<<"13.Vegetaux"<<std::endl<<"14.Zebre"<<std::endl;
+            std::cin>>photo;
+            sprintf(chaine,"savane/%d.jpg",photo);
+            add_interfaced_vertex(s_ajout, 10, 100, 100, chaine);
+
+            break;
+        }
+    case 3 :
+        {
+            std::cout<<"1.Aigle"<<std::endl<<"2.Araignee"<<std::endl<<"3.Arbre"<<std::endl<<"4.Biche"<<std::endl<<"5.Campagnol"<<std::endl<<"6.Chenille"<<std::endl<<"7.Hibou"<<std::endl<<"8.Criquet"<<std::endl<<"9.Ecureuil"<<std::endl<<"10.Vegetaux"<<std::endl<<"11.Lapin"<<std::endl<<"12.Pic vert"<<std::endl<<"13.Renard"<<std::endl<<"14.Sauterelle"<<std::endl;
+            std::cin>>photo;
+            sprintf(chaine,"foret/%d.jpg",photo);
+            add_interfaced_vertex(s_ajout, 10, 100, 100, chaine);
+            break;
+        }
+    }
+
+}
+///metgode ajouter sommet
+void Graph::ajout_sommet()
+{
+    ///on remet le bouton à false (pas cliqué)
+    m_interface->m_ajout_s.set_value(false);
+    ///variables
+    ///sommet ajouté
+    int s_ajout;
+    ///creation arete ou non
+    int liaison =1;
+    ///sommet a relié
+    int s_relie;
+    ///indice du sommet
+    int indice;
+    ///demande a l'utilisateur quel indice ajouté
+    std::cout<< "choisissez le sommet à ajouter svp "<<std::endl;
+    std::cin>> s_ajout;
+    ///creation d'un sommet
+    Vertex v ;
+    ///on recherche l'indice dans la map pour l'ajouter au bon endroit
+    for(auto elem : m_vertices)
+    {
+        indice = elem.first;
+    }
+        indice++;
+        std::cout<<" rang "<<indice;
+    ///je l'ajoute a la map de sommet
+    //m_vertices.insert({indice,v});
+    m_vertices[indice]=v;
+    ///on incrémente l'ordre
+    //m_ordre++;
+
+    ///on lui demande l'animal (photo) qu'il souhaite ajouter
+    choix_photo(s_ajout);
+
+    ///tant qu'il souhaite crée des aretes
+    while(liaison !=2)
+    {
+    std::cout<<"1.creer une liaison  2. Stop "<<std::endl;
+    std::cin>> liaison;
+
+    if (liaison ==1)
+        {
+            ///on incremente le nb d'arete
+            m_arete ++;
+            ///on demande a l'utilisateur le sommet auquel il souhaite relier son sommet
+            std::cout<<" a quel sommet souhaitez vous le relier "<<std::endl;
+            std::cin>> s_relie;
+            ///on appelle le ss prg d'ajout d'arete
+            ajout_arete(s_ajout,s_relie);
+        }
+      }
+
+
+std::cout<<" ajout effectue "<<std::endl;
+
+for(auto elem : m_vertices)
+{
+    std::cout<<" indice : "<<elem.first<<" "<<std::endl;
+    std::cout<<" valeur : "<<elem.second.m_value<<" "<<std::endl;
+}
+
+}
+
 ///methode recup sommet
 void Graph::recup_sommet(std::string _nom)
 {
@@ -801,30 +1052,23 @@ void Graph::colorier_som(Vertex v, char coul)
     v.m_coul = coul;
     v.m_interface->m_top_box.set_bg_color(coul);
 
-    ///Si le sommet v a des aretes sortantes
+    ///On parcours les aretes sortantes du sommet v
     if(v.m_out.size()!=0)
     {
-        ///On parcours les aretes sortantes du sommet v
         for(int i=0; i<v.m_out.size(); i++)
-
-        {   ///On parcours la map de sommet
+        {
             for(auto elem: m_vertices)
             {
-                ///Si les sommets ont des aretes entrantes
                 if(m_vertices[elem.first].m_in.size()!=0)
                 {
-                    ///On parcours les aretes entrantes de chaque sommet
                     for(int j =0; j<m_vertices[elem.first].m_in.size(); j++)
                     {
-                        ///Si l'arete entrante du sommet est égale à l'arete sortante du sommet v
+
                         if((elem.second).m_in[j]  == v.m_out[i])
                         {
-                            ///Si le voisin n'est pas colorier et qu'il est actif
                             if(m_vertices[elem.first].m_coul == ' '  && m_vertices[elem.first].m_actif == true)
                             {
-                                ///On le colorie
                                 m_vertices[elem.first].m_coul = coul;
-                                ///On rappel le sous programme
                                 colorier_som(m_vertices[elem.first], coul);
                             }
                         }
@@ -851,13 +1095,11 @@ void Graph::colorier_som(Vertex v, char coul)
                     ///on parcourt les aretes sortantes de v
                     for(int j =0; j<m_vertices[elem.first].m_out.size(); j++)
                     {
-                        ///si l'arete sortantes du sommet est égale à l'arete entrante de v
+                        ///si l'indice
                         if((elem.second).m_out[j]  == v.m_in[i])
                         {
-                            ///S'il n'a pas de couleurs et qu'il est actif
                             if(m_vertices[elem.first].m_coul == ' ' && m_vertices[elem.first].m_actif == true )
                             {
-                                ///On le colorie
                                 m_vertices[elem.first].m_coul = coul;
                                 colorier_som(m_vertices[elem.first], coul);
                             }
@@ -879,7 +1121,6 @@ int Graph ::colorier_compo_connexe()
     for(auto elem : m_vertices)
     {
         m_vertices[elem.first].m_interface->m_top_box.set_bg_color(BLANC);
-        m_vertices[elem.first].m_coul = ' ';
     }
     ///variable de couleur
     int coul = JAUNE;
@@ -916,6 +1157,9 @@ int Graph ::colorier_compo_connexe()
     return nb_compo;
 }
 
+
+
+///methode etude connexité
 void Graph::remplir_matrice_adjacence()
 {
 
@@ -925,6 +1169,8 @@ void Graph::remplir_matrice_adjacence()
         m_adjacence[i] = new int[m_ordre];
     }
 
+
+    std::cout << "m_ordre " << m_ordre << std::endl;
 
     for(int i = 0; i< m_ordre; i++)
     {
@@ -938,14 +1184,27 @@ void Graph::remplir_matrice_adjacence()
     for(auto elem: m_edges)
     {
 
-
+        std::cout << "elem.second.m_from : " << m_edges[elem.first].m_from << "elem.second.m_to : " << m_edges[elem.first].m_to << std::endl;
         m_adjacence[elem.second.m_from - 1][elem.second.m_to - 1] = 1;
+    }
+
+    std::cout << "matrice adjacence" << std::endl;
+    for(int i =0; i< m_ordre; i++)
+    {
+        for(int j= 0; j< m_ordre; j++)
+        {
+
+            std::cout << m_adjacence[i][j] << " ";
+
+        }
+        std::cout << std::endl;
+
     }
 
 
 }
 
-void Graph::fortement_connexe( )
+void Graph::fortement_connexe()
 {
     int** fort;
 
@@ -959,131 +1218,15 @@ void Graph::fortement_connexe( )
     remplir_matrice_adjacence();
     fort = toutes_compo_forte_connexe();
 
+    std::cout << " affichage compo fort" << std::endl;
     for(int i=0; i< m_ordre; i++)
     {
         for(int j=0; j<m_ordre; j++)
         {
-
-                if(fort[i][j] != 0)
-                {
-            m_vertices[i+1].m_interface->m_top_box.set_bg_color(fort[i][j]);
-            m_vertices[j+1].m_interface->m_top_box.set_bg_color(fort[i][j]);
-                }
-
+            std::cout << fort[i][j] << " ";
         }
-
+        std::cout << std::endl;
     }
-
-        graphe_reduit(fort);
-
-
-
-}
-
-void Graph::graphe_reduit(int** fort)
-{
-    std::map<int, std::vector<int> > compo;
-    std::vector<int> compo_inter;
-    int numero_compo = m_ordre+1;
-        ///On cherche les membres de la composante connexe
-
-                for(int i= 0; i< m_ordre; i++)
-                {      numero_compo++;
-                    for(int k = 0; k< compo_inter.size(); k++)
-                    {
-                        compo_inter.pop_back();
-                    }
-                    for(int j= 0; j<m_ordre; j++)
-                    {
-                        //std::cout << " couleur de  i " << i+1 << " est " <<m_vertices[i+1].m_interface->m_top_box.get_bg_color() << std::endl;
-                        //std::cout << " couleur de j " << j+1 << " est " <<m_vertices[j+1].m_interface->m_top_box.get_bg_color() << std::endl;
-                        if((m_vertices[i+1].m_interface->m_top_box.get_bg_color() == m_vertices[j+1].m_interface->m_top_box.get_bg_color()) && fort[i][j]!=0)
-                        {
-                            std::cout << "ajout de " << j+1 << "dans " << numero_compo <<std::endl;
-                            //std::cout << "avant ajout vector " << std::endl;
-                            compo_inter.push_back(j+1);
-
-                        }
-
-                    }
-                        if(compo_inter.size()!=0)
-                        {
-                            compo.insert ( std::pair<int ,std::vector<int>>(numero_compo,compo_inter) );
-                        }
-
-                    std::cout << "taille vecteur " << compo_inter.size() << std::endl;
-                    for(int k = 0; k< compo_inter.size(); k++)
-                    {
-                        compo_inter.pop_back();
-                    }
-
-                }
-
-
-
-        for(auto elem : compo)
-        {
-            std::cout << "numero compo : " << elem.first << " valeurs : " ;
-            for(int i = 0; i< elem.second.size(); i++)
-            {
-                std::cout << elem.second[i] <<" ";
-            }
-            std::cout << std::endl;
-        }
-
-
-
-
-
-        for(auto elem: compo)
-        {std::vector<int> in;
-        std::vector<int> out;
-
-
-
-            for(int i= 0; i< elem.second.size(); i++)
-            {
-
-
-
-                    for(int i= 0; i< m_vertices[elem.second[i]].m_in.size(); i++)
-                    {
-                        in.push_back(m_vertices[elem.second[i]].m_in[i]);
-                        //std::cout << "ajout dans m_in de " << m_vertices[elem.second[i]].m_in[i] << std::endl;
-                    }
-                    for(int i= 0; i< m_vertices[elem.second[i]].m_out.size(); i++)
-                    {
-                        out.push_back(m_vertices[elem.second[i]].m_out[i]);
-                        //std::cout << "ajout dans m_out de " << m_vertices[elem.second[i]].m_out[i] << std::endl;
-
-                    }
-
-            }
-            std::cout <<" sommet numero :" << elem.first << std::endl;
-        std::cout << "m_in = " ;
-        for(int i = 0; i<in.size(); i++)
-        {
-                std::cout << in[i] << " ";
-        }
-        std::cout << "m_out = " ;
-        for(int i = 0; i<out.size(); i++)
-        {
-                std::cout << out[i] << " ";
-        }
-        /*for(int i = 0; i<in.size(); i++)
-        {
-                in.pop_back();
-        }
-
-        for(int i = 0; i<out.size(); i++)
-        {
-                out.pop_back();        }*/
-            }
-
-                    ///Appeler ajout sommet en lui passant m_in et m_to
-
-
-
 
 
 }
@@ -1093,11 +1236,8 @@ int ** Graph::toutes_compo_forte_connexe()
     int** tabc;///Tableau dynamique des composantes fortements connexes à retourner
     int* marques; ///Tableau de marquage
     int x, y; ///Numero des sommets intermédiares comme indice des tableaux intermédiairs
-    int nb_fort_connexe = 0;
-    int coul = BLANC;
+    int cpt = 0;
     int chiffre = 0;
-    ///variable de couleur
-
     ///Allocation des tableaux tabc et marques de taille ordre
     tabc = new int*[m_ordre];
     for(int i= 0; i<m_ordre; i++)
@@ -1105,7 +1245,6 @@ int ** Graph::toutes_compo_forte_connexe()
         tabc[i] = new int[m_ordre];
     }
     marques = new int[m_ordre];
-
 
 
     ///Initialisation des valeurs à 0
@@ -1122,10 +1261,6 @@ int ** Graph::toutes_compo_forte_connexe()
         marques[j] = 0;
     }
 
-    for(auto elem: m_vertices)
-    {
-        m_vertices[elem.first].m_interface->m_top_box.set_bg_color(BLANC);
-    }
     ///Pour tous les sommets x non marqués
     ///Recherche compo fortement connexe de x
     ///Marquer chaque sommet x et marquer les sommets y connectés a x non marqués
@@ -1133,15 +1268,10 @@ int ** Graph::toutes_compo_forte_connexe()
     {
         if (!marques[x])
         {
-
-            ///on choisi une nouvelle couleur
-
-            coul = coul * 10;
-            tabc[x] = Une_Compo_Forte_Connexe(x, coul);
+            chiffre++;
+            tabc[x] = Une_Compo_Forte_Connexe(x, chiffre);
             marques[x] = 1;
-            nb_fort_connexe++;
-
-
+            cpt++;
 
             for(y=0; y<m_ordre; y++)
             {
@@ -1153,13 +1283,13 @@ int ** Graph::toutes_compo_forte_connexe()
         }
     }
 
-    std::cout << " Nombre de composante fortement connexe : " << nb_fort_connexe << std::endl;
+    std::cout << " cpt : " << cpt << std::endl;
     return tabc;
 }
 ///methode recherche toutes les compo fortement connexes
 int* Graph::Une_Compo_Forte_Connexe(int s, int chiffre)
 {
-
+    std::cout << "dans petit programme" << std::endl;
     int * c1, *c2; ///compo connexes directes partant de s et indirectes arrivant vers s
     int *c; ///Compo fortement connexe = intersection entre c1 et c2 ( à retourner)
     int * marques; ///tableau de marquages
@@ -1244,13 +1374,13 @@ int* Graph::Une_Compo_Forte_Connexe(int s, int chiffre)
             if(!marques[x] && c2[x])
             {
                 marques[x] = 1;
-
+                std::cout << "dans le if1" << std::endl;
                 for(y = 0; y< m_ordre; y++)
                 {
 
                     if(m_adjacence[y][x] && !marques[y])
                     {
-
+                        std::cout << "dans le if2" << std::endl;
                         c2[y] = chiffre;
                         ajoute = 1; ///Nouvelle composante connexe a ajouter
                     }
@@ -1278,10 +1408,10 @@ void Graph::dynamique_pop1()
      int k=100; ///capacité de portage de l'environnement
      int n; ///valeur (choisie par l'utilisateur) attribuée  au sommet
      */
-
-    while (!key[KEY_UP])//m_interface->m_animation.get_value() == true
+int t =0;
+    while (t<2)//m_interface->m_animation.get_value() == true
     {
-
+        t++;
         std::cout << "dans le while" << std::endl;
         ///a chaque tour de boucle la population croit ou decroit
         for(auto elem : m_vertices)
@@ -1318,6 +1448,7 @@ void Graph::dynamique_pop2(int sommet)
     int k=0; ///capacité de portage de l'environnement
     int n; ///valeur (choisie par l'utilisateur) attribuée  au sommet
     int c=0; ///valeur a soustraire
+
     ///on parcourt tous les sommets
     ///si on clique sur un
 
@@ -1334,6 +1465,7 @@ void Graph::dynamique_pop2(int sommet)
 
             k = k + m_edges[m_vertices[sommet].m_in[i]].m_weight * m_vertices[m_edges[m_vertices[sommet].m_in[i]].m_from].m_value;
             std::cout <<"dans le calcul de k, k = " << k << std::endl;
+            update();
         }
 
         std::cout<<" k = "<<k<<std::endl;
@@ -1419,25 +1551,18 @@ void Graph::dynamique_pop2(int sommet)
 
 void Graph::changement_nb_desactive()
 {
-
-    for(auto elem : m_vertices)
-    {
-        m_vertices[elem.first].m_actif = true;
-        m_vertices[elem.first].m_coul = ' ';
-
-        m_vertices[elem.first].m_interface->m_top_box.set_bg_color(BLANC);
-
-    }
+    int k_min = 0;
     int connexe = 0;
+    int k= 1;
+    int tour_complet = 0;
     bool trouve = false;
     std::vector<int> deco;
-    m_k_min = 0;
-    for( int k=1; k<m_ordre+1; k++)
-    {
-        if(k == 1 && m_k_min == 0)
-        {
-            std::cout << "k : " << k << std::endl;
 
+    if(k== 1)
+    {
+
+        while(k_min == 0 && tour_complet <= m_ordre)
+        {
 
 
 
@@ -1446,16 +1571,16 @@ void Graph::changement_nb_desactive()
             for(auto elem: m_vertices)
             {
 
-
+                std::cout<<" sommet tester "<<elem.first<<std::endl;
                 ///on désactive le sommet
                 m_vertices[elem.first].m_actif = false;
                 connexe = colorier_compo_connexe();
                 m_vertices[elem.first].m_actif = true;
-
+                tour_complet++;
 
                 if(connexe > 1)
                 {
-                    m_k_min = k;
+                    k_min = k;
 
                     trouve = true;
                     deco.push_back(elem.first);
@@ -1464,71 +1589,69 @@ void Graph::changement_nb_desactive()
             }
 
 
-            std::cout << "k_min :" << m_k_min << std::endl;
+
+            std::cout << "k_min :" << k_min << std::endl;
             for(int i = 0; i< deco.size(); i++)
             {
                 std::cout << "sommet a retirer " << deco[i] << std::endl;
-
-                    m_vertices[deco[i]].m_interface->m_top_box.set_bg_color(ROUGE);
-
             }
-            for(int i = 0; i< deco.size(); i++)
+          }
+
+
+    k= 2;}
+
+    if(k != 1 )
+    {
+
+
             {
-                deco.pop_back();
-            }
-        }
+        for(int k=2; k<m_ordre+1; k++)
+        {
 
-
-
-
-        if(k != 1  )
+        if(m_trouve == false)
         {
 
 
+            std::cout << " k : " << k << std::endl;
 
 
 
-            while(m_k_min == 0)
+            for (int i = 0; i < m_ordre; ++i)
             {
+                m_combinaison_partielle.push_back(i+1);
+
+            }
+
+
+              boucle_combinaison( 0, k, k);
+
                 for (int i = 0; i < m_ordre; ++i)
-                {
-                    m_combinaison_partielle.push_back(i+1);
+            {
+                m_combinaison_partielle.pop_back();
 
-                }
+            }
+            for (int i = 0; i < m_combinaison_totale.size(); ++i)
+            {
+                m_combinaison_totale.pop_back();
+
+            }
+
+        }
+        }
 
 
-                boucle_combinaison( 0, k, k);
 
 
-
-
-
-            for (int i = 0; i < m_combinaison_partielle.size(); ++i)
-    {
-        m_combinaison_partielle.pop_back();
-
-    }
-    for (int i = 0; i < m_combinaison_totale.size(); ++i)
-    {
-        m_combinaison_totale.pop_back();
-
-    }
-
-}
 
 
         }
 
 
 
+
     }
-    m_k_min = 0;
-    m_trouve = false;
 
-    std::cout << "fin calcul k_connexite" << std::endl;
-    return;
 }
-
 
 void Graph::boucle_combinaison(int offset, int numero_de_k_uplets, int k)
 {
@@ -1539,20 +1662,25 @@ void Graph::boucle_combinaison(int offset, int numero_de_k_uplets, int k)
     {
 
         k_connexite(k);
-
-        return ;
+        //std::cout << "taille dans ss prog " << m_combinaison_totale.size() << std::endl;
+        //return ;
     }
     else
     {
 
-        for(int i=0; i< m_combinaison_partielle.size() - (numero_de_k_uplets); i++)
-        {
 
-            m_combinaison_totale.push_back(m_combinaison_partielle[i]);
-            boucle_combinaison(i+1, numero_de_k_uplets -1, k);
-            m_combinaison_totale.pop_back();
+    //std::cout << " k " << numero_de_k_uplets<< std::endl;
+    for(int i=0; i< m_combinaison_partielle.size() - (numero_de_k_uplets); i++)
+    {
 
-        }
+        m_combinaison_totale.push_back(m_combinaison_partielle[i]);
+        boucle_combinaison(i+1, numero_de_k_uplets -1, k);
+        m_combinaison_totale.pop_back();
+
+
+
+
+    }
     }
 
 
@@ -1563,72 +1691,92 @@ void Graph::boucle_combinaison(int offset, int numero_de_k_uplets, int k)
 void Graph::k_connexite(int k)
 {
 
+//std::cout << " k dans connextie : " << cpt << std::endl;
+ static int count = 0;
+  std::cout << "combination no " << (++count) << ": [ ";
+  for (int i = 0; i < m_combinaison_totale.size(); ++i) { std::cout << m_combinaison_totale[i] << " "; }
+  std::cout << "] " << std::endl;
 
     ///BUT : Trouver combien au minimum de sommet doit-on enlever pour deconnecter le graphe et lesquels
     int connexe = 0;
+    int cpt = 0;
+    int k_min = 0;
     ///nb min pour deco graphe
-    std::vector<int> deco;
 
-
-    for(int i=0; i< m_combinaison_totale.size(); i++)
-    {
-
-        ///on désactive le sommet
-
-        m_vertices[m_combinaison_totale[i]].m_actif = false;
-        std::cout << " elem a false : " << m_combinaison_totale[i] << std::endl;
-
-    }
-
-    for(auto elem: m_vertices)
-    {
-        std::cout << elem.first << " :" << m_vertices[elem.first].m_actif << std::endl;
-    }
-
-    connexe = colorier_compo_connexe();
+std::vector<int> deco;
 
 
 
-    for(int i=0; i< m_combinaison_totale.size(); i++)
-    {
-        m_vertices[m_combinaison_totale[i]].m_actif = true;
-
-
-        if(connexe > 1)
+        if( k_min == 0 )
         {
-            m_trouve = true;
-
-            m_k_min = k;
-            deco.push_back( m_combinaison_totale[i]);
 
 
+            for(int i=0; i< m_combinaison_totale.size(); i++)
+            { ///On retire k par k les sommets
 
+
+                ///on désactive le sommet
+
+                m_vertices[m_combinaison_totale[i]].m_actif = false;
+            }
+                connexe = colorier_compo_connexe();
+
+                 std::cout << "cpt = " << cpt << std::endl;
+                if(connexe > 1)
+                {
+                    //m_trouve = true;
+                    k_min = k;
+                    for(int i= 0; i<m_combinaison_totale.size(); i++)
+                    {
+                        if(m_vertices[m_combinaison_totale[i]].m_actif == false)
+                        {
+                            deco.push_back( m_combinaison_totale[i]);
+                            m_vertices[m_combinaison_totale[i]].m_actif = true;
+                        }
+
+
+                    }
+
+                }
+            }
+
+
+
+
+        std::cout << "k_min :" << k_min << std::endl;
+
+        for(int i = 0; i< deco.size(); i++)
+        {
+            std::cout << "sommet a retirer " << deco[i] << std::endl;
         }
-    }
 
-    for(auto elem: m_vertices)
-    {
-        std::cout << elem.first << " :" << m_vertices[elem.first].m_actif << std::endl;
-    }
 
-    std::cout << "k_min :" << m_k_min << std::endl;
 
-    for(int i = 0; i< deco.size(); i++)
-    {
-        std::cout << "sommet a retirer " << deco[i] << std::endl;
 
-        m_vertices[deco[i]].m_interface->m_top_box.set_bg_color(ROUGE);
-
-    }
-
-    for(int i=0; i<deco.size(); i++)
-    {
-        deco.pop_back();
-    }
 
 
 }
 
+int Graph::facto(int n)
+{
+    int facto, i;
+    facto = 1;
+    i = 1;
+    while(i<=n)
+    {
+        facto = facto*i;
+        i = i+1;
+    }
+    return facto;
+}
+
+int Graph::combi(int k)
+{
+ int combi;
+
+ combi = (facto(m_ordre))/((facto(k))*(facto(m_ordre-k)));
+ return combi;
+}
 
 
 
@@ -1643,23 +1791,29 @@ void Graph::update()
     m_interface->m_tool_box.update();
     m_interface->m_sauvegarde.update();
     m_interface->m_animation.update();
+     m_interface->m_ajout_a.update();
+     m_interface->m_ajout_s.update();
+     m_interface->m_fort_connexite.update();
+     m_interface->m_k_connexite.update();
+     m_interface->m_menu.update();
+
     for (auto &elt : m_vertices)
         elt.second.pre_update();
 
     for (auto &elt : m_edges)
         elt.second.pre_update();
 
+    m_interface->m_menu.update();
     m_interface->m_top_box.update();
-    // m_interface->m_main_box.update();
-    //m_interface->m_sauvegarde.update_pre_draw();
-    //m_interface->m_sauvegarde.interact_focus();
-    //m_interface->m_sauvegarde.update_draw();
-
     m_interface->m_tool_box.update();
     m_interface->m_sauvegarde.update();
     m_interface->m_connexite.update();
     m_interface->m_animation.update();
+    m_interface->m_fort_connexite.update();
+    m_interface->m_ajout_a.update();
+    m_interface->m_ajout_s.update();
     m_interface->m_legende_sauvegarde.update();
+    m_interface->m_k_connexite.update();
 
 
     for (auto &elt : m_vertices)
@@ -1672,6 +1826,11 @@ void Graph::update()
     m_interface->m_sauvegarde.update();
     m_interface->m_animation.update();
     m_interface->m_connexite.update();
+     m_interface->m_ajout_s.update();
+     m_interface->m_ajout_a.update();
+     m_interface->m_fort_connexite.update();
+     m_interface->m_k_connexite.update();
+     m_interface->m_menu.update();
 }
 
 /// Aide à l'ajout de sommets interfacés
@@ -1713,3 +1872,14 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     m_edges[idx] = Edge(weight, ei, id_vert1, id_vert2);
 }
 
+
+///getter m_monde
+int Graph::GetMonde()
+{
+    return m_monde;
+}
+
+void Graph::SetMonde(int monde)
+{
+    m_monde =monde;
+}
