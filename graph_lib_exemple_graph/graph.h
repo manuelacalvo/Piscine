@@ -289,10 +289,14 @@ class GraphInterface
         grman::WidgetEdge m_lien3;
          grman::WidgetText m_legende_sauvegarde;
         grman::WidgetText m_legende_connexite;
-        grman::WidgetText m_legende_animation;
+        grman::WidgetText m_legende_animation1;
+        grman::WidgetText m_legende_animation2;
         grman::WidgetText m_legende_fort_connexite;
         grman::WidgetText m_legende_k_connexite;
         grman::WidgetText m_legende_menu;
+        grman::WidgetText m_legende_graph_reduit;
+        grman::WidgetText m_legende_quitter;
+
 
         // A compléter éventuellement par des widgets de décoration ou
         // d'édition (boutons ajouter/enlever ...)
@@ -303,13 +307,17 @@ class GraphInterface
     grman::WidgetButton m_k_connexite;
     grman::WidgetButton m_sauvegarde;
     grman::WidgetButton m_connexite;
-    grman::WidgetButton m_animation;
+    grman::WidgetButton m_animation1;
+    grman::WidgetButton m_animation2;
     grman::WidgetButton m_ajout_s;
     grman::WidgetButton m_ajout_a;
     grman::WidgetButton m_fort_connexite;;
     grman::WidgetText m_ajout_s_text;
-     grman::WidgetText m_ajout_a_text;
+    grman::WidgetText m_ajout_a_text;
     grman::WidgetText m_connexite_text;
+    grman::WidgetButton m_graph_reduit;
+    grman::WidgetButton m_quitter;
+
 
 
         // Le constructeur met en place les éléments de l'interface
@@ -336,10 +344,13 @@ class Graph
         int m_nb_fort_connexe;
         std::vector<int> m_combinaison_totale;
         std::vector<int> m_combinaison_partielle;
+        std::vector<int> m_sommets_retires;
         bool m_trouve = false;
         int m_k_min = 0;
+        std::map<int, Edge> m_edges_fortement_connexe;
+        std::map<int, Vertex> m_vertices_fortement_connexe;
 
-
+        int r, k, c;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<GraphInterface> m_interface = nullptr;
@@ -356,7 +367,7 @@ class Graph
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Graph (GraphInterface *interface=nullptr)
-        : m_interface(interface), m_ordre(0), m_arete(0), m_trouve(false), m_monde(0)
+        : m_interface(interface), m_ordre(0), m_arete(0), m_trouve(false), m_monde(0), r(0), k(0), c(0)
         {
 
 
@@ -372,8 +383,8 @@ class Graph
         delete[] m_adjacence;
         }
 
-        void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
-        void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
+        VertexInterface * add_interfaced_vertex(int idx, double value, int x, int y, int graphe, std::string pic_name="", int pic_idx=0 );
+        void add_interfaced_edge(int idx, int vert1, int vert2, int graphe,double weight=0 );
 
         std::shared_ptr<GraphInterface> get_interface();
 
@@ -393,15 +404,16 @@ class Graph
         void recup_sommet(std::string _nom);
 
         ///methode suppression arete
-        void supp_arete_test();
-        void supp_arete(int eidx);
+        void supp_arete_main();
+        void supp_arete(int eidx, std::map<int, Edge> _edges, std::map<int, Vertex> _vertices);
 
         ///methode suppression sommet
-        void supp_sommet_selec();
-        void supp_sommet(int vdx);
+        void supp_sommet_main();
+        void supp_sommet_selec(std::map<int, Vertex> _vertices, std::map<int,Edge> _edges);
+        void supp_sommet(int vdx, std::map<int, Vertex> _vertices, std::map<int, Edge> _edges);
 
         ///methode ajout sommet
-        void ajout_sommet();
+        void ajout_sommet_utilisateur();
         void choix_photo(int s_ajout);
 
         ///methode ajout arete
@@ -422,9 +434,10 @@ class Graph
         void k_connexite(int k);
         void changement_nb_desactive();
         void boucle_combinaison(int offset, int numero_de_k_uplets, int k);
-        int facto(int n);
-        int combi(int k);
         void graphe_reduit(int** fort);
+        void vider_graphe_reduit();
+        void gestion();
+        void save_para();
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();

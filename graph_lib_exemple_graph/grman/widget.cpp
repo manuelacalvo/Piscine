@@ -56,6 +56,7 @@ void Widget::update_interact()
 /// (Nécessaire pour les liens : affichés au fond donc en 1er mais s'appuyant sur les positions des autres qui sont affichés après)
 void Widget::update_pre_draw()
 {
+
     create_frame_context();
 
     /// Propagation de l'update aux elements enfants

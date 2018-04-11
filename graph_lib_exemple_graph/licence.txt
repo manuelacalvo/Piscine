@@ -1,0 +1,25 @@
+//////////////////////////////////////SOURCES/////////////////////////////////////////
+
+************************BASE DU CODE*****************************************
+Code graph_lib de Mr Fercoq
+
+************************RESEAUX NON TROPHIQUES**********************************
+Savane africaine : 
+	http://soutien67.free.fr/svt/animaux/zoo/monde/pages/savane_africaine/savane.htm
+Fôret :
+	https://ecologyandthebioshpere.weebly.com/interactions.html
+Banquise arctique :
+	http://soutien67.free.fr/svt/animaux/zoo/monde/pages/banquise_arctique/banquise_arctique.htm
+
+**************************ALGO STRUCTURELS****************************
+Algo connexité : Algorythme 1 et 2 pages 6 et 7 du powerpoint de cours chapitre 2 : connexité
+Algo forte connexité : Algorythme page 17 et 18 du poly de cours
+Algo k-connexité : 
+	Trouver combinaison k parmis n:
+		https://stackoverflow.com/questions/12991758/creating-all-possible-k-combinations-of-n-items-in-c
+
+***************************SUPPRESSION ARRETES***************************
+Code fournis par mail de Mr Fercoq
+
+****************************ALLEGRO****************************************
+Cours de Mr fercoq : http://www.ece.fr/~fercoq/allegro/
